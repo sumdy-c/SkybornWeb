@@ -1,5 +1,5 @@
 import Menu from './menu/main';
-import * as BABYLON from "babylonjs";
+import * as BABYLON from 'babylonjs';
 import Render from './render';
 
 export default class Connector {
@@ -14,9 +14,8 @@ export default class Connector {
     }
 
     private connect() {
-       const scene = new Menu(this.engine, this.viewport).create();
-
-       Render.init(scene, this.engine);
-       Render.up();
-    };
+        const scene = new Menu(this.engine, this.viewport).create();
+        Render.init(scene, this.engine);
+        Render.up();
+    }
 }
