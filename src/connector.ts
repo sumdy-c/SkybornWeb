@@ -1,6 +1,7 @@
 import Menu from './menu/main';
 import * as BABYLON from 'babylonjs';
 import Render from './render';
+import { ApiProvider } from './services/ApiProvider';
 
 export default class Connector {
     private engine;
@@ -14,6 +15,11 @@ export default class Connector {
     }
 
     private connect() {
+        
+        ApiProvider.GET('users', (data: object) => {
+            console.log(data);
+        });
+
         const scene = new Menu(this.engine, this.viewport).create();
         Render.init(scene, this.engine);
         Render.up();
