@@ -1,27 +1,29 @@
-import Menu from './menu/main';
-import * as BABYLON from 'babylonjs';
-import Render from './render';
+import Menu from './menu/root';
+import { WebGPUEngine } from 'babylonjs';
 import { ApiProvider } from './services/ApiProvider';
 
 export default class Connector {
     private engine;
     private viewport;
 
-    constructor(engine: BABYLON.WebGPUEngine, viewport: HTMLCanvasElement) {
+    constructor(engine: WebGPUEngine, viewport: HTMLCanvasElement) {
         this.engine = engine;
         this.viewport = viewport;
 
-        this.connect();
+        // this.connect().then(() => {
+            this.draw();
+        // }).catch(e => alert(`Ошибка 234 ${e.message}`));
     }
 
-    private connect() {
-        
+    private async connect() {
         ApiProvider.GET('users', (data: object) => {
             console.log(data);
         });
 
-        const scene = new Menu(this.engine, this.viewport).create();
-        Render.init(scene, this.engine);
-        Render.up();
+        return true;
     }
-}
+
+    private draw() {
+        new Menu(this.engine, this.viewport);
+    }
+};

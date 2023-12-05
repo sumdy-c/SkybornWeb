@@ -1,12 +1,19 @@
-import * as BABYLON from 'babylonjs';
+import { Scene, WebGPUEngine } from 'babylonjs';
 
 export default class Render {
-    static scene: BABYLON.Scene;
-    static engine: BABYLON.WebGPUEngine;
+    static scene: Scene;
+    static engine: WebGPUEngine;
 
-    static init(scene: BABYLON.Scene, engine: BABYLON.WebGPUEngine) {
+    static init(scene: Scene, engine: WebGPUEngine) {
         Render.scene = scene;
         Render.engine = engine;
+    }
+
+    static change(scene: Scene) {
+        // Render.scene.dispose();
+        Render.scene.detachControl();
+        Render.scene = scene;
+        Render.scene.attachControl(); 
     }
 
     static up() {

@@ -1,5 +1,5 @@
 import Connector from './connector';
-import * as BABYLON from "babylonjs";
+import { WebGPUEngine } from 'babylonjs';
 
 /**
  * Контролёр точки отрисовки.
@@ -10,23 +10,21 @@ class RootController {
     constructor(root: Element) {
         this.root = <HTMLCanvasElement>root;
         if (!this.setViewPort()) {
-            console.log(
-                'ошибка 1',
-            );
+            alert('Ошибка 147');
             return;
-        } 
-        this.createEngine().then((engine) => {
+        }
+        this.createEngine()
+            .then((engine) => {
+                window.addEventListener('resize', function () {
+                    engine.resize();
+                });
 
-            window.addEventListener("resize", function () {
-                engine.resize();
+                new Connector(engine, this.root);
+            })
+            .catch((error) => {
+                console.log(error.message);
+                alert('ошибка 262' + error.message);
             });
-
-            new Connector(engine, this.root);
-            
-        }).catch((error) => {
-            console.log(error.message);
-            console.log('ошибка 2')
-        });
     }
 
     private setViewPort() {
@@ -46,7 +44,7 @@ class RootController {
     }
 
     async createEngine() {
-        const engine = new BABYLON.WebGPUEngine(this.root);
+        const engine = new WebGPUEngine(this.root);
         await engine.initAsync();
         return engine;
     }
