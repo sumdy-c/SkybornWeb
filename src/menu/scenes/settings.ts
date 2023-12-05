@@ -34,7 +34,6 @@ export class Setting {
         );
         light.intensity = 0.7;
 
-        // Our built-in 'sphere' shape.
         var sphere = MeshBuilder.CreateSphere(
             'sphere',
             { diameter: 2, segments: 32 },

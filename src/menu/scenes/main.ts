@@ -3,13 +3,9 @@ import {
     WebGPUEngine,
     ArcRotateCamera,
     Vector3,
-    HemisphericLight,
-    MeshBuilder,
-    ActionManager,
-    ExecuteCodeAction
+    HemisphericLight
 } from 'babylonjs';
-
-// import { GUI3DManager } from '@babylonjs/gui';
+import { GUI3DManager, Button3D } from 'babylonjs-gui';
 import Menu from '../root';
 
 export class Main {
@@ -31,11 +27,22 @@ export class Main {
         this.viewport = viewport;
         this.root = root;
     }
-
+    
+    
     scene() {
         let scene = new Scene(this.engine);
 
-        // const manager = new GUI3DManager(scene);
+        const manager = new GUI3DManager(scene);
+        const button = new Button3D('button');
+
+        button.onPointerClickObservable.add(() => {
+            // this.root.change('store');
+            
+            this.engine.displayLoadingUI();
+            
+        });
+
+        manager.addControl(button);
 
         const camera = new ArcRotateCamera(
             'camera1',
@@ -45,29 +52,13 @@ export class Main {
             new Vector3(0, 1, 0),
             scene,
         );
-        camera.setTarget(Vector3.Zero());
+        
+        camera.setTarget(button.position);
         camera.attachControl(this.viewport, true);
+        
         var light = new HemisphericLight('light', new Vector3(0, 1, 0), scene);
         light.intensity = 0.7;
 
-        // Our built-in 'sphere' shape.
-        var sphere = MeshBuilder.CreateSphere(
-            'sphere',
-            { diameter: 2, segments: 32 },
-            scene,
-        );
-        sphere.position.y = 1;
-
-        sphere.actionManager = new ActionManager(scene);
-
-        sphere.actionManager.registerAction(
-            new ExecuteCodeAction(
-                ActionManager.OnPickTrigger,
-                () => this.root.change('store'),
-            ),
-        );
-
-        MeshBuilder.CreateGround('ground', { width: 6, height: 6 }, scene);
         return scene;
     }
 }

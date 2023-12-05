@@ -40,9 +40,6 @@ export default class Menu {
         this.scenes = { main: null, store: null, setting: null };
 
         this.initialization().then(() => {
-            if(this.scenes.main){
-                this.currentScene = this.scenes.main;
-            }
             this.provider();
         }).catch(e => { console.log(e.message) });
     }
@@ -54,19 +51,25 @@ export default class Menu {
 
                 !this.scenes.main ? this.scenes.main = new Main(this.engine, this.viewport, this).scene() : null;
                 
+                this.currentScene = this.scenes.main;
+
                 !this.scenes.store ? this.scenes.store = new Store(
                     this.engine,
                     this.viewport,
                     this
                 ).scene() : null;
                 
-                !this.scenes.setting ?this.scenes.setting = new Setting(
+                !this.scenes.setting ? this.scenes.setting = new Setting(
                     this.engine,
                     this.viewport,
                 ).scene() : null;
 
                 Object.values(this.scenes).forEach(scene => {
-                    if(!scene){
+                    if(this.currentScene?.uid !== scene?.uid) {
+                        scene?.detachControl();
+                    };
+
+                    if(!scene) {
                         check = false;
                     }
                 });
@@ -80,6 +83,7 @@ export default class Menu {
     };
 
     change(arg: string) {
+        console.log(arg);
         if(this.scenes[arg]) {
             this.currentScene = this.scenes[arg] as Scene;
             Render.change(this.currentScene);
